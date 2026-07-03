@@ -7,7 +7,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Make sure to replace <db_password> in your environment variables on Render!
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://root:<db_password>@cluster0.ordklei.mongodb.net/college_cms?appName=Cluster0';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://root:root@cluster0.ordklei.mongodb.net/college_cms?appName=Cluster0';
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
