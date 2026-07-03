@@ -19,7 +19,7 @@
         }
         body { font-family: 'Inter', sans-serif; background: var(--bg-color); color: var(--text-main); margin:0; padding:0; overflow-x:hidden;}
         
-        /* Sidebar Styling (Matches Image) */
+        /* Sidebar Styling */
         .sidebar { width: 280px; height: 100vh; background: var(--sidebar-bg); position: fixed; top: 0; left: 0; padding-top: 25px; overflow-y: auto; z-index: 1000; }
         .sidebar::-webkit-scrollbar { width: 0; }
         .brand-box { padding: 0 25px 30px; display: flex; align-items: center; color: white; gap: 15px;}
@@ -45,7 +45,7 @@
         .profile-btn { display: flex; align-items: center; background: white; padding: 6px 15px 6px 6px; border-radius: 30px; gap: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); text-decoration: none;}
         .profile-btn img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
         
-        /* Dashboard Metric Cards (Matching Image) */
+        /* Dashboard Metric Cards */
         .card { border: none; border-radius: var(--card-radius); box-shadow: 0 5px 20px rgba(0,0,0,0.03); margin-bottom: 25px; overflow: hidden; background: white;}
         .metric-card { padding: 25px; border-radius: var(--card-radius); color: white; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.05);}
         .metric-card h6 { margin: 0; font-size: 14px; font-weight: 500; opacity: 0.9;}
@@ -156,7 +156,6 @@
     <% } %>
 
     <% if (page === 'dashboard') { %>
-        <!-- Match Dashboard Widget Cards -->
         <div class="row mb-3">
             <div class="col"><div class="metric-card bg-purple">
                 <div><div class="metric-icon"><i class="fas fa-graduation-cap"></i></div><h6>Total Courses</h6></div>
@@ -181,26 +180,31 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-8">
-                <div class="card h-100">
+            <div class="col-lg-8 mb-4">
+                <div class="card h-100 m-0">
                     <div class="card-header-custom"><h5>Attendance Overview</h5></div>
                     <div class="card-body">
-                        <canvas id="overviewChart" height="250"></canvas>
+                        <!-- Wrapper added here to fix the infinite expanding glitch -->
+                        <div style="position: relative; height: 280px; width: 100%;">
+                            <canvas id="overviewChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card h-100">
+            <div class="col-lg-4 mb-4">
+                <div class="card h-100 m-0">
                     <div class="card-header-custom"><h5>Performance Metrics</h5></div>
                     <div class="card-body d-flex align-items-center justify-content-center">
-                        <canvas id="perfChart" height="250"></canvas>
+                        <!-- Wrapper added here to fix the infinite expanding glitch -->
+                        <div style="position: relative; height: 250px; width: 100%;">
+                            <canvas id="perfChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
         <script>
-            // Fake data to match the visual charts of the image
             new Chart(document.getElementById('overviewChart'), {
                 type: 'line',
                 data: {
