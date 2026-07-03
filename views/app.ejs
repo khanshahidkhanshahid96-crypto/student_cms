@@ -12,7 +12,631 @@
         :root {
             --sidebar-bg: #1B1C31;
             --sidebar-hover: #2B2DFB;
+            --bg-color: #F4F7FE;<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS | <%= page.replace('_', ' ').toUpperCase() %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --sidebar-bg: #1B1C31;
+            --sidebar-hover: #2B2DFB;
             --bg-color: #F4F7FE;
+            --text-main: #2B3674;
+            --text-muted: #A3AED0;
+            --card-radius: 20px;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; overflow-x: hidden; }
+        
+        /* Sidebar */
+        .sidebar { position: fixed; top: 0; left: 0; width: 280px; height: 100vh; background-color: var(--sidebar-bg); color: #fff; padding: 20px; overflow-y: auto; }
+        .sidebar .brand { display: flex; align-items: center; gap: 15px; margin-bottom: 40px; font-weight: 700; font-size: 1.1rem; }
+        .sidebar .brand-logo { background: linear-gradient(135deg, #FF9C00, #FFC048); width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+        .nav-header { font-size: 0.75rem; color: #8A8EA8; font-weight: 600; text-transform: uppercase; margin: 20px 0 10px 10px; letter-spacing: 1px; }
+        .nav-link { color: #A3AED0; display: flex; align-items: center; gap: 15px; padding: 12px 15px; border-radius: 12px; margin-bottom: 5px; font-weight: 500; transition: all 0.3s; text-decoration: none; }
+        .nav-link:hover { color: #fff; background-color: rgba(255,255,255,0.05); }
+        .nav-link.active { color: #fff; background-color: var(--sidebar-hover); }
+        .nav-link i { width: 20px; text-align: center; }
+        .nav-link.logout { color: #FF4C61; margin-top: 15px; }
+        .nav-link.logout:hover { background-color: rgba(255, 76, 97, 0.1); }
+        .trophy-card { background: linear-gradient(180deg, #2B2DFB 0%, #1A1C60 100%); border-radius: 16px; padding: 20px; text-align: center; margin-top: 40px; margin-bottom: 20px;}
+        .trophy-card i { font-size: 30px; color: #FFC048; margin-bottom: 10px; }
+
+        /* Main Content */
+        .main-content { margin-left: 280px; padding: 20px 30px; min-height: 100vh; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .page-title { font-size: 24px; font-weight: 700; margin: 0; text-transform: capitalize; }
+        .topbar-actions { display: flex; align-items: center; gap: 15px; background: #fff; padding: 8px 15px; border-radius: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .topbar-actions .icon-btn { color: var(--text-muted); background: none; border: none; font-size: 18px; position: relative; }
+        .badge-dot { position: absolute; top: -2px; right: -2px; background: red; width: 15px; height: 15px; border-radius: 50%; font-size: 10px; color: #fff; display: flex; align-items: center; justify-content: center; }
+        .user-profile { display: flex; align-items: center; gap: 10px; padding-left: 15px; border-left: 1px solid #E2E8F0; }
+        .user-profile img { width: 40px; height: 40px; border-radius: 50%; }
+
+        /* Generic Cards */
+        .card-custom { background: #fff; border-radius: var(--card-radius); border: none; box-shadow: 0 5px 20px rgba(0,0,0,0.03); padding: 20px; margin-bottom: 25px; }
+        .metric-card { padding: 25px 20px; border-radius: var(--card-radius); color: #fff; display: flex; align-items: center; gap: 20px; flex: 1; min-width: 150px;}
+        .metric-card .icon { width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .metric-card h3 { font-size: 28px; font-weight: 700; margin: 0; }
+        .metric-card p { margin: 0; font-size: 14px; opacity: 0.9; }
+
+        .bg-purple { background: #6366F1; }
+        .bg-green { background: #00B87C; }
+        .bg-orange { background: #FF9C00; }
+        .bg-blue { background: #0075FF; }
+        .bg-pink { background: #FF4C61; }
+
+        .table-custom { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        .table-custom th { color: var(--text-muted); font-weight: 500; padding: 10px 15px; border: none; font-size: 14px; }
+        .table-custom td { background: #fff; padding: 15px; border: none; vertical-align: middle; }
+        .table-custom tr td:first-child { border-radius: 12px 0 0 12px; }
+        .table-custom tr td:last-child { border-radius: 0 12px 12px 0; }
+        
+        .btn-custom { border-radius: 10px; padding: 8px 20px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="brand">
+            <div class="brand-logo">S</div>
+            <div>SMS <br><span style="font-size: 12px; font-weight:400; color:#A3AED0">Management System</span></div>
+        </div>
+
+        <a href="/app?page=dashboard" class="nav-link <%= page==='dashboard'?'active':'' %>"><i class="fa-solid fa-house"></i> Dashboard</a>
+
+        <% if (user.role === 'admin') { %>
+            <div class="nav-header">Academic</div>
+            <a href="/app?page=courses" class="nav-link <%= page==='courses'?'active':'' %>"><i class="fa-solid fa-book"></i> Courses</a>
+            <a href="/app?page=subjects" class="nav-link <%= page==='subjects'?'active':'' %>"><i class="fa-solid fa-book-open"></i> Subjects</a>
+            
+            <div class="nav-header">Users</div>
+            <a href="/app?page=manage_staff" class="nav-link <%= page==='manage_staff'?'active':'' %>"><i class="fa-solid fa-chalkboard-user"></i> Staff</a>
+            <a href="/app?page=manage_students" class="nav-link <%= page==='manage_students'?'active':'' %>"><i class="fa-solid fa-user-graduate"></i> Students</a>
+            
+            <div class="nav-header">Requests</div>
+            <a href="/app?page=notifications" class="nav-link <%= page==='notifications'?'active':'' %>"><i class="fa-solid fa-envelope-open-text"></i> Leave Requests</a>
+            <a href="/app?page=notify" class="nav-link <%= page==='notify'?'active':'' %>"><i class="fa-solid fa-bullhorn"></i> Send Notice</a>
+
+        <% } else if (user.role === 'staff') { %>
+            <div class="nav-header">Academic</div>
+            <a href="/app?page=take_attendance" class="nav-link <%= page==='take_attendance'?'active':'' %>"><i class="fa-solid fa-clipboard-user"></i> Take Attendance</a>
+            <a href="/app?page=manage_exams" class="nav-link <%= page==='manage_exams'?'active':'' %>"><i class="fa-solid fa-star"></i> Exam Scores</a>
+            <a href="/app?page=view_attendance" class="nav-link <%= page==='view_attendance'?'active':'' %>"><i class="fa-solid fa-list-check"></i> View Attendance</a>
+            
+            <div class="nav-header">Others</div>
+            <a href="/app?page=apply_leave" class="nav-link <%= page==='apply_leave'?'active':'' %>"><i class="fa-solid fa-plane-departure"></i> Leave</a>
+            <a href="/app?page=staff_notifs" class="nav-link <%= page==='staff_notifs'?'active':'' %>"><i class="fa-solid fa-bell"></i> Notices</a>
+
+        <% } else if (user.role === 'student') { %>
+            <div class="nav-header">Academic</div>
+            <a href="/app?page=my_attendance" class="nav-link <%= page==='my_attendance'?'active':'' %>"><i class="fa-solid fa-clipboard-check"></i> My Attendance</a>
+            <a href="/app?page=exam_results" class="nav-link <%= page==='exam_results'?'active':'' %>"><i class="fa-solid fa-graduation-cap"></i> Exam Results</a>
+            
+            <div class="nav-header">Others</div>
+            <a href="/app?page=apply_leave" class="nav-link <%= page==='apply_leave'?'active':'' %>"><i class="fa-solid fa-plane-departure"></i> Leave</a>
+            <a href="/app?page=student_notifs" class="nav-link <%= page==='student_notifs'?'active':'' %>"><i class="fa-solid fa-bell"></i> Notices</a>
+            <a href="/app?page=feedback" class="nav-link <%= page==='feedback'?'active':'' %>"><i class="fa-solid fa-comment-dots"></i> Feedback</a>
+        <% } %>
+
+        <div class="trophy-card">
+            <i class="fa-solid fa-trophy"></i>
+            <h6 style="color:white; margin:10px 0 0 0;">Keep it up!</h6>
+            <p style="font-size:12px; color:#A3AED0; margin:5px 0 0 0;">Great progress today</p>
+        </div>
+
+        <a href="/logout" class="nav-link logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <div class="topbar">
+            <div>
+                <p style="margin:0; color:var(--text-muted); font-size:14px;">Welcome back,</p>
+                <h1 class="page-title"><%= page.replace(/_/g, ' ') %></h1>
+            </div>
+            
+            <div class="topbar-actions">
+                <div style="background:#F4F7FE; border-radius:20px; padding:5px 15px; display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-search" style="color:#A3AED0"></i>
+                    <input type="text" placeholder="Search..." style="border:none; background:transparent; outline:none; width:120px; font-size:14px;">
+                </div>
+                <button class="icon-btn"><i class="fa-regular fa-calendar"></i></button>
+                <button class="icon-btn"><i class="fa-regular fa-bell"></i><span class="badge-dot">3</span></button>
+                <div class="user-profile">
+                    <div style="text-align:right;">
+                        <div style="font-size:14px; font-weight:600; color:var(--text-main)"><%= user.full_name %></div>
+                        <div style="font-size:12px; color:var(--text-muted); text-transform:capitalize;"><%= user.role %></div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=<%= user.full_name %>&background=random" alt="Profile">
+                </div>
+            </div>
+        </div>
+
+        <% if (success_msg) { %>
+            <div class="alert alert-success alert-dismissible fade show rounded-3" role="alert">
+                <i class="fa-solid fa-check-circle me-2"></i> <%= success_msg %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        <% } %>
+
+        <!-- PAGE CONTENTS -->
+        <% if (page === 'dashboard') { %>
+            <div class="d-flex gap-3 mb-4 flex-wrap">
+                <% if (user.role === 'admin' || user.role === 'staff') { %>
+                    <div class="metric-card bg-purple">
+                        <div class="icon"><i class="fa-solid fa-book"></i></div>
+                        <div><h3><%= total_courses || 0 %></h3><p>Total Courses</p></div>
+                    </div>
+                    <div class="metric-card bg-green">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <div><h3><%= total_subjects || 0 %></h3><p>Total Subjects</p></div>
+                    </div>
+                    <div class="metric-card bg-blue">
+                        <div class="icon"><i class="fa-solid fa-user-graduate"></i></div>
+                        <div><h3><%= total_students || 0 %></h3><p>Total Students</p></div>
+                    </div>
+                    <div class="metric-card bg-orange">
+                        <div class="icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <div><h3><%= total_staff || 0 %></h3><p>Total Staff</p></div>
+                    </div>
+                <% } else if (user.role === 'student') { %>
+                    <div class="metric-card bg-purple">
+                        <div class="icon"><i class="fa-solid fa-book"></i></div>
+                        <div><h3><%= total_courses || 0 %></h3><p>Total Courses</p></div>
+                    </div>
+                    <div class="metric-card bg-green">
+                        <div class="icon"><i class="fa-solid fa-book-open"></i></div>
+                        <div><h3><%= total_subjects || 0 %></h3><p>Total Subjects</p></div>
+                    </div>
+                    <div class="metric-card bg-blue">
+                        <div class="icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                        <div>
+                            <h3><%= total_total ? Math.round((total_present/total_total)*100) : 0 %>%</h3>
+                            <p>Attendance</p>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card-custom">
+                        <h5 class="mb-4 fw-bold">Attendance Overview</h5>
+                        <div style="position: relative; height:300px;">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-custom">
+                        <h5 class="mb-4 fw-bold">Performance Metrics</h5>
+                        <div style="position: relative; height:300px;">
+                            <canvas id="doughnutChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    new Chart(document.getElementById('lineChart'), {
+                        type: 'line',
+                        data: {
+                            labels: ['May 1', 'May 5', 'May 10', 'May 15', 'May 20', 'May 25', 'May 31'],
+                            datasets: [
+                                { label: 'Present', data: [85, 88, 84, 90, 85, 92, 89], borderColor: '#00B87C', tension: 0.4 },
+                                { label: 'Absent', data: [15, 12, 16, 10, 15, 8, 11], borderColor: '#FF4C61', tension: 0.4 }
+                            ]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                    new Chart(document.getElementById('doughnutChart'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Excellent', 'Good', 'Needs Work'],
+                            datasets: [{ data: [55, 30, 15], backgroundColor: ['#00B87C', '#0075FF', '#FF4C61'] }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, cutout: '70%' }
+                    });
+                });
+            </script>
+
+        <!-- COURSES / SUBJECTS -->
+        <% } else if (page === 'courses' || page === 'subjects') { %>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card-custom">
+                        <h5 class="mb-3 fw-bold">Add <%= page === 'courses' ? 'Course' : 'Subject' %></h5>
+                        <form action="/app?page=<%= page %>" method="POST">
+                            <input type="hidden" name="action" value="add_<%= page.slice(0,-1) %>">
+                            <div class="mb-3">
+                                <label>Name</label>
+                                <input type="text" name="name" class="form-control rounded-3" required>
+                            </div>
+                            <% if (page === 'subjects') { %>
+                            <div class="mb-3">
+                                <label>Course</label>
+                                <select name="course_id" class="form-control rounded-3" required>
+                                    <% courses.forEach(c => { %><option value="<%= c._id %>"><%= c.name %></option><% }) %>
+                                </select>
+                            </div>
+                            <% } %>
+                            <button type="submit" class="btn btn-primary btn-custom w-100" style="background:#6366F1; border:none;">Save</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <% if(page==='subjects'){ %><th>Course</th><% } %>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% const arr = page==='courses' ? courses : subjects; %>
+                                <% arr.forEach(item => { %>
+                                    <tr>
+                                        <td class="fw-bold"><%= item.name %></td>
+                                        <% if(page==='subjects'){ %><td><%= item.course_id ? item.course_id.name : '-' %></td><% } %>
+                                        <td>
+                                            <a href="/app?page=<%= page %>&delete=1&table=<%= page %>&id=<%= item._id %>" class="btn btn-sm btn-light text-danger"><i class="fa-solid fa-trash"></i></a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        <!-- MANAGE STAFF & STUDENTS -->
+        <% } else if (page === 'manage_staff' || page === 'manage_students') { %>
+            <div class="card-custom d-flex justify-content-between align-items-center mb-0 pb-3" style="background:transparent; box-shadow:none;">
+                <h5 class="fw-bold m-0"><%= page === 'manage_staff' ? 'Staff Members' : 'Enrolled Students' %></h5>
+                <button class="btn btn-primary btn-custom" style="background:#6366F1; border:none;" data-bs-toggle="modal" data-bs-target="#addModal">
+                    <i class="fa-solid fa-plus"></i> Add New
+                </button>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Gender</th>
+                            <% if (page === 'manage_students') { %><th>Course</th><% } %>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% const userArr = page === 'manage_staff' ? staffs : students; %>
+                        <% if (userArr && userArr.length > 0) { %>
+                            <% userArr.forEach(u => { %>
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <img src="https://ui-avatars.com/api/?name=<%= u.full_name %>&background=random" style="width:35px; border-radius:50%;">
+                                            <span class="fw-bold"><%= u.full_name %></span>
+                                        </div>
+                                    </td>
+                                    <td><%= u.email %></td>
+                                    <td><%= u.gender || '-' %></td>
+                                    <% if (page === 'manage_students') { %><td><%= u.course_id ? u.course_id.name : '-' %></td><% } %>
+                                    <td>
+                                        <a href="/app?page=<%= page %>&delete=1&table=<%= page === 'manage_staff' ? 'staff' : 'students' %>&id=<%= u._id %>" class="btn btn-sm btn-light text-danger"><i class="fa-solid fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="5" class="text-center text-muted">No records found.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal Add User -->
+            <div class="modal fade" id="addModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content rounded-4 border-0">
+                        <div class="modal-header border-0"><h5 class="fw-bold">Add <%= page === 'manage_staff' ? 'Staff' : 'Student' %></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                        <div class="modal-body">
+                            <form action="/app?page=<%= page %>" method="POST">
+                                <input type="hidden" name="action" value="<%= page === 'manage_staff' ? 'add_staff' : 'add_student' %>">
+                                <div class="mb-3"><input type="text" name="full_name" class="form-control rounded-3" placeholder="Full Name" required></div>
+                                <div class="mb-3"><input type="email" name="email" class="form-control rounded-3" placeholder="Email Address" required></div>
+                                <div class="mb-3">
+                                    <select name="gender" class="form-control rounded-3" required>
+                                        <option value="">Select Gender</option><option>Male</option><option>Female</option>
+                                    </select>
+                                </div>
+                                <% if (page === 'manage_students') { %>
+                                <div class="mb-3">
+                                    <select name="course_id" class="form-control rounded-3" required>
+                                        <option value="">Select Course</option>
+                                        <% courses.forEach(c => { %><option value="<%= c._id %>"><%= c.name %></option><% }) %>
+                                    </select>
+                                </div>
+                                <% } %>
+                                <div class="mb-3"><textarea name="address" class="form-control rounded-3" placeholder="Address" rows="2"></textarea></div>
+                                <button type="submit" class="btn btn-primary btn-custom w-100" style="background:#6366F1; border:none;">Add User</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- TAKE ATTENDANCE & EXAM SCORES (STAFF) -->
+        <% } else if (page === 'manage_attendance' || page === 'take_attendance' || page === 'manage_exams') { %>
+            <div class="card-custom">
+                <form action="/app" method="GET" class="row g-3 align-items-end">
+                    <input type="hidden" name="page" value="<%= page %>">
+                    <% if (page !== 'manage_exams') { %>
+                    <div class="col-md-3">
+                        <label>Date</label>
+                        <input type="date" name="fetch_date" class="form-control rounded-3" value="<%= fetch_date %>" required>
+                    </div>
+                    <% } %>
+                    <div class="col-md-3">
+                        <label>Course</label>
+                        <select name="fetch_course" class="form-control rounded-3" required>
+                            <option value="">Select Course</option>
+                            <% courses.forEach(c => { %><option value="<%= c._id %>" <%= fetch_course==c._id.toString()?'selected':'' %>><%= c.name %></option><% }) %>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Subject</label>
+                        <select name="fetch_subject" class="form-control rounded-3" required>
+                            <option value="">Select Subject</option>
+                            <% subjects.forEach(s => { %><option value="<%= s._id %>" <%= fetch_subject==s._id.toString()?'selected':'' %>><%= s.name %></option><% }) %>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-custom w-100" style="background:#6366F1; border:none;">Fetch</button>
+                    </div>
+                </form>
+            </div>
+
+            <% if (fetched_students && fetched_students.length > 0) { %>
+                <form action="/app?page=<%= page %>" method="POST">
+                    <input type="hidden" name="action" value="<%= page === 'manage_exams' ? 'save_scores' : 'save_attendance' %>">
+                    <input type="hidden" name="date" value="<%= fetch_date %>">
+                    <input type="hidden" name="course_id" value="<%= fetch_course %>">
+                    <input type="hidden" name="subject_id" value="<%= fetch_subject %>">
+
+                    <div class="table-responsive">
+                        <table class="table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% fetched_students.forEach(st => { %>
+                                    <tr>
+                                        <td class="fw-bold"><%= st.full_name %></td>
+                                        <td>
+                                            <% if (page === 'manage_exams') { %>
+                                                <input type="number" name="score[<%= st._id %>]" class="form-control w-50" min="0" max="100" value="<%= existing_scores[st._id] || '' %>">
+                                            <% } else { %>
+                                                <div class="form-check form-check-inline text-success fw-bold">
+                                                    <input class="form-check-input" type="radio" name="attendance[<%= st._id %>]" value="Present" <%= existing_attendance[st._id]==='Present'?'checked':'' %> required> Present
+                                                </div>
+                                                <div class="form-check form-check-inline text-danger fw-bold">
+                                                    <input class="form-check-input" type="radio" name="attendance[<%= st._id %>]" value="Absent" <%= existing_attendance[st._id]==='Absent'?'checked':'' %> required> Absent
+                                                </div>
+                                            <% } %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-custom px-5 mt-3"><i class="fa-solid fa-floppy-disk me-2"></i> Save Records</button>
+                </form>
+            <% } else if (fetch_course) { %>
+                <div class="alert alert-info">No students found for this selection.</div>
+            <% } %>
+
+        <!-- APPLY LEAVE (STAFF/STUDENT) -->
+        <% } else if (page === 'apply_leave') { %>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card-custom">
+                        <h5 class="fw-bold mb-4">Apply for Leave</h5>
+                        <form action="/app?page=apply_leave" method="POST">
+                            <input type="hidden" name="action" value="apply_leave">
+                            <div class="mb-3"><label>Leave Date</label><input type="date" name="date" class="form-control rounded-3" required></div>
+                            <div class="mb-4"><label>Reason</label><textarea name="message" class="form-control rounded-3" rows="4" required></textarea></div>
+                            <button type="submit" class="btn btn-primary btn-custom w-100" style="background:#6366F1; border:none;">Submit Application</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <h5 class="fw-bold mb-3 ms-2">Leave History</h5>
+                    <% if (my_leaves && my_leaves.length > 0) { %>
+                        <% my_leaves.forEach(lv => { %>
+                            <div class="card-custom mb-3 p-3 d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-bold"><i class="fa-regular fa-calendar text-muted me-2"></i> <%= lv.date %></div>
+                                    <div class="text-muted small mt-1"><%= lv.message %></div>
+                                </div>
+                                <span class="badge rounded-pill bg-<%= lv.status==='Approved'?'success':(lv.status==='Declined'?'danger':'warning text-dark') %> px-3 py-2">
+                                    <%= lv.status %>
+                                </span>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="alert alert-secondary">No leave history found.</div>
+                    <% } %>
+                </div>
+            </div>
+
+        <!-- NOTIFICATIONS / LEAVE REQUESTS (ADMIN) -->
+        <% } else if (page === 'notifications') { %>
+            <div class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Date & Reason</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% leaves.forEach(lv => { %>
+                            <tr>
+                                <td class="fw-bold"><%= lv.user_id ? lv.user_id.full_name : 'Unknown' %></td>
+                                <td><span class="badge bg-secondary text-capitalize"><%= lv.role %></span></td>
+                                <td>
+                                    <div class="fw-bold"><%= lv.date %></div>
+                                    <div class="small text-muted"><%= lv.message %></div>
+                                </td>
+                                <td><span class="badge rounded-pill bg-<%= lv.status==='Approved'?'success':(lv.status==='Declined'?'danger':'warning text-dark') %> px-3 py-2"><%= lv.status %></span></td>
+                                <td>
+                                    <% if (lv.status === 'Pending') { %>
+                                        <form action="/app?page=notifications" method="POST" class="d-inline">
+                                            <input type="hidden" name="action" value="update_leave">
+                                            <input type="hidden" name="leave_id" value="<%= lv._id %>">
+                                            <input type="hidden" name="status" value="Approved">
+                                            <button type="submit" class="btn btn-sm btn-success rounded-circle px-2 py-1"><i class="fa-solid fa-check"></i></button>
+                                        </form>
+                                        <form action="/app?page=notifications" method="POST" class="d-inline ms-1">
+                                            <input type="hidden" name="action" value="update_leave">
+                                            <input type="hidden" name="leave_id" value="<%= lv._id %>">
+                                            <input type="hidden" name="status" value="Declined">
+                                            <button type="submit" class="btn btn-sm btn-danger rounded-circle px-2 py-1"><i class="fa-solid fa-xmark"></i></button>
+                                        </form>
+                                    <% } else { %> - <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+
+        <!-- SEND NOTICES (ADMIN) -->
+        <% } else if (page === 'notify') { %>
+            <div class="card-custom mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold mb-4">Broadcast Notice</h5>
+                <form action="/app?page=notify" method="POST">
+                    <input type="hidden" name="action" value="send_notification">
+                    <div class="mb-3">
+                        <label>Target Audience</label>
+                        <select name="type" class="form-control rounded-3" required>
+                            <option value="student">All Students</option>
+                            <option value="staff">All Staff</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label>Message</label>
+                        <textarea name="message" class="form-control rounded-3" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-custom w-100" style="background:#6366F1; border:none;"><i class="fa-solid fa-paper-plane me-2"></i> Send Notification</button>
+                </form>
+            </div>
+
+        <!-- VIEW NOTICES (STAFF / STUDENT) -->
+        <% } else if (page === 'staff_notifs' || page === 'student_notifs') { %>
+            <% if (notifs && notifs.length > 0) { %>
+                <div class="row">
+                    <% notifs.forEach(n => { %>
+                        <div class="col-md-6 mb-3">
+                            <div class="card-custom h-100 d-flex flex-row align-items-center gap-3">
+                                <div style="width:50px; height:50px; background:#F4F7FE; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#FF9C00; font-size:24px;">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-bold text-dark"><%= n.message %></div>
+                                    <div class="small text-muted mt-1"><%= new Date(n.created_at).toLocaleString() %></div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-secondary">No new notices.</div>
+            <% } %>
+
+        <!-- VIEW ATTENDANCE (STAFF / STUDENT) -->
+        <% } else if (page === 'view_attendance' || page === 'my_attendance') { %>
+            <div class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <% if (page === 'view_attendance') { %><th>Student</th><% } %>
+                            <th>Subject</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% const attLog = page === 'view_attendance' ? logs : my_att; %>
+                        <% if (attLog && attLog.length > 0) { %>
+                            <% attLog.forEach(a => { %>
+                                <tr>
+                                    <td class="fw-bold"><%= a.date %></td>
+                                    <% if (page === 'view_attendance') { %><td><%= a.student_id ? a.student_id.full_name : 'Unknown' %></td><% } %>
+                                    <td><%= a.subject_id ? a.subject_id.name : '-' %></td>
+                                    <td><span class="badge rounded-pill bg-<%= a.status==='Present'?'success':'danger' %> px-3 py-2"><%= a.status %></span></td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="4" class="text-center text-muted">No records found.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+        <!-- EXAM RESULTS (STUDENT) -->
+        <% } else if (page === 'exam_results') { %>
+            <% if (scores && scores.length > 0) { %>
+                <div class="row">
+                    <% scores.forEach(sc => { %>
+                        <div class="col-md-4 mb-4">
+                            <div class="card-custom text-center" style="border-top: 4px solid #6366F1;">
+                                <h6 class="text-muted text-uppercase mb-3 fw-bold"><%= sc.subject_id ? sc.subject_id.name : '-' %></h6>
+                                <h1 class="fw-bold m-0" style="color:#2B3674; font-size:48px;"><%= sc.score %></h1>
+                                <p class="text-muted mb-0">out of 100</p>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <div class="alert alert-info">No exam scores available yet.</div>
+            <% } %>
+
+        <!-- FEEDBACK (STUDENT) -->
+        <% } else if (page === 'feedback') { %>
+            <div class="card-custom mx-auto" style="max-width: 600px;">
+                <h5 class="fw-bold mb-4">Submit Feedback / Query</h5>
+                <form action="/app?page=feedback" method="POST">
+                    <input type="hidden" name="action" value="send_feedback">
+                    <div class="mb-4">
+                        <textarea name="message" class="form-control rounded-3" rows="6" placeholder="Describe your issue or share your thoughts..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-custom w-100" style="background:#6366F1; border:none;">Submit Feedback</button>
+                </form>
+            </div>
+        <% } %>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
             --text-main: #2B3674;
             --text-muted: #A3AED0;
             --card-radius: 20px;
