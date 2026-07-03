@@ -1,7 +1,6 @@
 {
   "name": "college-cms-node",
   "version": "1.0.0",
-  "description": "College CMS converted to Node.js matching image design",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
